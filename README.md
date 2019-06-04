@@ -2,13 +2,14 @@
 
 App built to time your activities using Pomodoro Method
 
-![Screenshot](https://github.com/zyzmoz/pomodoro/blob/master/misc/screenshot.png?raw=true)
+![Screenshot](https://github.com/zyzmoz/pomodoro/blob/master/screenshot.png?raw=true)
 
 ## Tools used
 - React
 - Redux
 - Octicons
 - Parcel Bundler
+- Local Storage
 
 ## Commands
 
