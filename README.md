@@ -18,7 +18,7 @@ Run development server (port 8080):
   npm start
 ```
 
-Run build (default folder 'build'):
+Run build (default folder 'dist'):
 ```
   npm build
 ```
