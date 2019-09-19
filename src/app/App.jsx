@@ -37,8 +37,10 @@ const App = (props) => {
   
   const [display, setDisplay] = useState('');
   const [clock, setClock] = useState(null);
+  // const [timer, setTimer] = useState(0);
 
-  const countDown = () => {       
+  const countDown = () => {    
+    let onBreak = false;   
     if (timer != 0 )
       setClock(setInterval(() => {
         minutes = parseInt(timer / 60,10);
@@ -49,15 +51,20 @@ const App = (props) => {
         setDisplay(minutes + ":" + seconds)  ;
 
         if (--timer < 0) {     
-          if (!breakTime){
+          if (!onBreak){
+            onBreak = true;
+            console.log('Break');
             props.startBreak();
             timer = settings.breakTime * 60;
           } else {
+            onBreak = false;
             props.stopBreak();
             timer = settings.workingTime * 60;
+            console.log('Stop Break');
           }    
           
         }
+        console.log('Break Time', onBreak, timer);
          
         
       }, 1000));

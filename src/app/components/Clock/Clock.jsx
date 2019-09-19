@@ -7,7 +7,7 @@ const Clock = (props) => {
 
   return (
     <div className="clock" >
-      {pomodoroStarted ?
+      {pomodoroStarted && display ?
         <div>
           <p>{!onBreak ? 'Working' : 'Break'}</p>
           <p>{display} left</p>
