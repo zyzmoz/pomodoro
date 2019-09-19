@@ -4,6 +4,8 @@ App built to time your activities using Pomodoro Method
 
 ![Screenshot](https://github.com/zyzmoz/pomodoro/blob/master/screenshot.png?raw=true)
 
+[Live snapshot](https://pedantic-wright-54068e.netlify.com/)
+
 ## Tools used
 - React
 - Redux
