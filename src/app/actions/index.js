@@ -9,7 +9,11 @@ export const saveSettings = (settings) => {
 }
 
 export const loadSettings = () => {
-  const settings = JSON.parse(localStorage.getItem('@pomodoro:settings'));
+  let settings = JSON.parse(localStorage.getItem('@pomodoro:settings'));
+  if (!settings) {
+    settings = { workingTime: 15, breakTime: 5 }
+
+  }
   return {
     type: LOAD_SETTINGS,
     payload: { settings }
