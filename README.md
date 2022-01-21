@@ -6,6 +6,11 @@ App built to time your activities using Pomodoro Method
 
 [Live snapshot](https://pedantic-wright-54068e.netlify.com/)
 
+## News
+
+Jan/2022: Added PWA technology
+
+
 ## Tools used
 - React
 - Redux
@@ -24,6 +29,11 @@ Run build (default folder 'dist'):
 ```
   npm build
 ```
+
+## Future Features
+- [ ] Sound alerts
+- [ ] Notifications
+- [ ] Profiles
 
 Feel free to fork, copy and study it!
 
