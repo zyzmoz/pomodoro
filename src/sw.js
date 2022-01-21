@@ -1,15 +1,23 @@
-self.addEventListener("install", evt => {
+self.addEventListener("install", (evt) => {
   evt.waitUntil(
-    caches.open("static").then(cache => {
-      return cache.addAll(["./", "./*.png", "./*.css", "./*.js"])
+    caches.open("static").then((cache) => {
+      return cache.addAll(["./", "./index.html"]);
     })
-  )
-})
+  );
+});
 
-self.addEventListener("fetch", evt => {
+self.addEventListener("fetch", (evt) => {
+  console.log({ req: evt.request });
+
   evt.respondWith(
-    caches.match(evt.request).then(response => {
-      return response || fetch(evt.request);
-    })
-    )
-})
+    caches
+      .open("static")
+      .then((cache) => {
+        return fetch(evt.request).then((response) => {
+          cache.put(evt.request, response.clone());
+          return response;
+        });
+      })
+      .catch((err) => caches.match(evt.request).then((response) => response))
+  );
+});
