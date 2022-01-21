@@ -13,3 +13,11 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js").then(registration => {
+    console.log("ServiceWorker registred!!", {registration})
+  }).catch(error => {
+    console.error({error})
+  })
+}

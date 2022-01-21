@@ -1,0 +1,20 @@
+{
+  "name": "Pomodoro Clock",
+  "short_name": "Pomodoro",
+  "display": "standalone",
+  "start_url": ".",
+  "theme_color": "#ffffff",
+  "background_color": "#D8737F",
+  "icons": [
+    {
+      "src": "assets/icons/pomodoro128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icons/pomodoro512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
