@@ -31,9 +31,12 @@ Run build (default folder 'dist'):
 ```
 
 ## Future Features
-- [ ] Sound alerts
-- [ ] Notifications
+- [x] Sound alerts
+- [x] Notifications
 - [ ] Profiles
+
+![CHANGELOG](https://github.com/zyzmoz/pomodoro/blob/master/CHANGELOG.md)
+
 
 Feel free to fork, copy and study it!
 
