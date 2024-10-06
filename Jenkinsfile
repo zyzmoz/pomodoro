@@ -11,7 +11,7 @@ node {
 
   stage('Test') {
     nodejs(nodeJSInstallationName: 'nodejs18') {
-      sh 'npm install -D'
+      sh 'npm ci -D'
       sh 'npm run test'
     }
   }

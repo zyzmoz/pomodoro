@@ -15,7 +15,7 @@ ReactDOM.render(
 );
 
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("./sw.js").then(registration => {
+  navigator.serviceWorker.register(new URL('./sw.js', import.meta.url)).then(registration => {
     console.log("ServiceWorker registred!!", {registration})
   }).catch(error => {
     console.error({error})

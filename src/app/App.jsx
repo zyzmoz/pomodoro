@@ -16,7 +16,7 @@ import Octicon, { Grabber } from "@githubprimer/octicons-react";
 import Clock from "./components/Clock/Clock";
 import Settings from "./components/Settings/Settings";
 import Controls from "./components/Controls/Controls";
-import bell from "../assets/sounds/bell.wav";
+
 
 const mapState = (state) => ({
   pomodoro: state.pomodoro,
@@ -33,6 +33,8 @@ const actions = {
   stopBreak,
   resetPomodoro,
 };
+
+const bell = new URL('../assets/sounds/bell.wav', import.meta.url);
 
 const App = (props) => {
   const { showSettings, settings, breakTime, pomodoroStarted } = props.pomodoro;
