@@ -9,9 +9,15 @@ node {
     commit_id = readFile('.git/commit-id').trim()
   }
 
+  stage('Build') {
+    nodejs(nodeJSInstallationName: 'nodejs18') {
+      sh 'npm ci'
+      sh 'npm run build'
+    }
+  }
+
   stage('Test') {
     nodejs(nodeJSInstallationName: 'nodejs18') {
-      sh 'npm ci -D'
       sh 'npm run test'
     }
   }
