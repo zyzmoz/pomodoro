@@ -34,6 +34,7 @@ Run build (default folder 'dist'):
 - [x] Notifications
 - [ ] Profiles
 
+
 [CHANGELOG 🕦](https://github.com/zyzmoz/pomodoro/blob/master/CHANGELOG.md)
 
 ---
