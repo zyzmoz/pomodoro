@@ -2,27 +2,38 @@
   "name": "pomodoro",
   "version": "1.2.1",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "start": "parcel -p 8080 ./src/index.html",
-    "build": "parcel build ./src/index.html --public-url ./  && cp _redirects dist/_redirects"
+    "start": "parcel serve src/public/index.html --port 8080",
+    "build": "parcel build src/public/index.html --dist-dir dist --public-url ./ && cp _redirects dist/_redirects",
+    "test": "jest",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "Daniel Cunha",
   "license": "MIT",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
   "dependencies": {
-    "@githubprimer/octicons-react": "^8.5.0",
+    "@primer/octicons-react": "^19.33.0",
+    "@reduxjs/toolkit": "^2.12.0",
     "moment": "^2.29.4",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-redux": "^8.1.2",
-    "redux": "^4.2.1"
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-redux": "^9.3.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.19",
-    "@babel/plugin-proposal-class-properties": "^7.4.4",
-    "@babel/plugin-transform-runtime": "^7.22.15",
-    "@babel/preset-react": "^7.22.15",
-    "parcel-bundler": "^1.12.3"
+    "@parcel/packager-raw-url": "^2.16.4",
+    "@parcel/transformer-webmanifest": "^2.16.4",
+    "@swc/jest": "^0.2.39",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
+    "parcel": "^2.16.4",
+    "typescript": "^7.0.2"
   }
 }

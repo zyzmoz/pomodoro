@@ -1,47 +1,75 @@
 # Pomodoro Clock
 
-App built to time your activities using Pomodoro Method
+A browser-based Pomodoro timer for work and break sessions.
 
-![Screenshot](https://github.com/zyzmoz/pomodoro/blob/master/screenshot.png?raw=true)
+![Pomodoro Clock screenshot](./screenshot.png)
 
-[Live snapshot](https://pedantic-wright-54068e.netlify.com/)
+## What it does
 
-## 🎉 News
+- Starts, stops, and resets work sessions.
+- Alternates between work and break periods.
+- Saves work and break durations in local storage.
+- Plays a bell and shows browser notifications when a period ends.
+- Runs as an installable PWA with a service worker.
 
-Sep/2023: Sound Notifications Added 🔉
+## Stack
 
-## 🔧 Tools used
-- React
-- Redux
-- Octicons
-- Parcel Bundler
-- Local Storage
+- React 19
+- Redux Toolkit and React Redux
+- TypeScript
+- Parcel 2
+- Primer Octicons
+- Jest and React Testing Library
 
-## 💻 Commands
+## Requirements
 
-Run development server (port 8080):
+Use Node.js 24.14.1. The version is pinned in `.nvmrc`.
+
+## Commands
+
+Start the development server on port 8080:
+
+```bash
+npm start
 ```
-  npm start
+
+Run the test suite:
+
+```bash
+npm test
 ```
 
-Run build (default folder 'dist'):
-```
-  npm build
+Check TypeScript types:
+
+```bash
+npm run typecheck
 ```
 
-## 🔮 Future Features
-- [x] Sound alerts
-- [x] Notifications
+Create a production build in `dist`:
+
+```bash
+npm run build
+```
+
+## Project layout
+
+```text
+src/
+├── assets/       Styles, icons, and sounds
+├── components/   Clock, controls, and settings UI
+├── constants/    Shared values such as default durations
+├── helpers/      Local storage and notification code
+├── public/       HTML entry point, manifest, and service worker
+├── store/        Redux Toolkit store and Pomodoro slice
+├── types/        Shared TypeScript types
+├── App.tsx
+└── index.tsx
+```
+
+## Roadmap
+
 - [ ] Profiles
 
-[CHANGELOG 🕦](https://github.com/zyzmoz/pomodoro/blob/master/CHANGELOG.md)
+## License
 
----
-Feel free to fork, copy and study it!
-
-That's all folks
-
-Daniel 
-
-
-
+MIT
