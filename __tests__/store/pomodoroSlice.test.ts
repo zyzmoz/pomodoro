@@ -11,7 +11,13 @@ describe("pomodoroSlice", () => {
   });
 
   it("updates settings and tracks a break", () => {
-    const settings = { workingTime: 25, breakTime: 10 };
+    const settings = {
+      workingTime: 25,
+      breakTime: 10,
+      primaryColor: "#D8737F",
+      secondaryColor: "#222222",
+      tertiaryColor: "#000000",
+    };
     const withSettings = pomodoroReducer(
       undefined,
       pomodoroActions.saveSettings(settings)

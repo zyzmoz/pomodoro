@@ -7,8 +7,8 @@ h2 {
   height: 100vh;
   display: flex;     
   align-items: center; 
-  background-color: #D8737F;
-  color: #f2f2f2;
+  background-color: var(--color-primary, #D8737F);
+  color: var(--color-secondary, #222222);
 }
 
 .app-header {  
@@ -46,7 +46,7 @@ h2 {
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  border: 2px solid #f2f2f2;
+  border: 2px solid var(--color-secondary, #222222);
   margin: 0 auto;
   display: flex;
   align-items: center; 
@@ -69,9 +69,9 @@ h2 {
   right: 0;
   height: 100%;
   width: 300px;
-  background-color: #f2f2f2;
-  color: #222;
-  box-shadow: 1px -3px 3px 3px #Ab6c82;
+  background-color: var(--color-secondary, #222222);
+  color: var(--color-primary, #D8737F);
+  box-shadow: 1px -3px 3px 3px rgba(0, 0, 0, 0.3);
 }
 
 .settings-header {
@@ -97,20 +97,39 @@ h2 {
   font-size: 12px;
 }
 
+.settings-content input[type="range"] {
+  accent-color: var(--color-primary, #D8737F);
+}
+
+.settings-content input[type="color"] {
+  accent-color: var(--color-primary, #D8737F);
+}
+
+.btn:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--color-tertiary, #000000);
+  outline-offset: 3px;
+}
+
+.settings .btn:focus-visible,
+.settings input:focus-visible {
+  outline-color: var(--color-primary, #D8737F);
+}
+
 
 
 .btn {
   width: 48px;
   height: 48px;
   background-color: transparent;
-  border: 1px solid #f2f2f2;
-  color: #f2f2f2;
+  border: 1px solid var(--color-secondary, #222222);
+  color: var(--color-secondary, #222222);
   border-radius: 3px;  
   outline: none;
 }
 .btn:hover {  
-  background-color: #f2f2f2;
-  color: #D8737F;
+  background-color: var(--color-secondary, #222222);
+  color: var(--color-primary, #D8737F);
 }
 
 .btn-small {
@@ -127,20 +146,20 @@ h2 {
 }
 
 .btn-dark {  
-  color: #222;
+  color: var(--color-primary, #D8737F);
 }
 
 .btn-dark:hover {  
-  color: #444;
+  color: var(--color-primary, #D8737F);
 }
 
 .btn-success:hover{
-  color: #8cc152;
-  border-color: #8cc152;
+  color: var(--color-primary, #D8737F);
+  border-color: var(--color-tertiary, #000000);
 }
 .btn-success {
-  background-color: #8cc152;
-  color: #f2f2f2;
+  background-color: var(--color-tertiary, #000000);
+  color: var(--color-primary, #D8737F);
 }
 
 .btn-full {
@@ -162,3 +181,16 @@ h2 {
   font-size: 24px;
 }
 
+.color-preview {
+  display: flex;
+  gap: 4px;
+}
+
+.settings-content .color-preview span {
+  flex: 1;
+  width: auto;
+  padding: 4px;
+  color: #222;
+  font-size: 10px;
+  text-align: center;
+}

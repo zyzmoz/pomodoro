@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { getThemeColors } from "./helpers/colors";
 import { showNotification, requestNotificationPermission } from "./helpers/notifications";
 import { loadSettings, saveSettings } from "./helpers/settings";
 import { useAppDispatch, useAppSelector } from "./store";
@@ -40,6 +41,20 @@ const App = () => {
   }, [dispatch]);
 
   const [display, setDisplay] = useState("");
+  const themeColors = useMemo(
+    () =>
+      getThemeColors(
+        settings.primaryColor,
+        settings.secondaryColor,
+        settings.tertiaryColor
+      ),
+    [settings.primaryColor, settings.secondaryColor, settings.tertiaryColor]
+  );
+  const themeStyle = {
+    "--color-primary": themeColors.primary,
+    "--color-secondary": themeColors.secondary,
+    "--color-tertiary": themeColors.tertiary,
+  } as CSSProperties;
 
   const playBell = useCallback(() => {
     const audio = audioRef.current;
@@ -54,15 +69,16 @@ const App = () => {
 
   const onTimerComplete = useCallback(() => {
     isBreakRef.current = !isBreakRef.current;
-    playBell();
 
     if (isBreakRef.current) {
+      playBell();
       showNotification("Break time");
       dispatch(pomodoroActions.startBreak());
       timerRef.current = settings.breakTime * 60;
       return;
     }
 
+    playBell();
     showNotification("It's time to work");
     dispatch(pomodoroActions.stopBreak());
     timerRef.current = settings.workingTime * 60;
@@ -126,9 +142,9 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <div className="app-main">
+    <main className="app-main" style={themeStyle}>
       <div className="app-header">
-        <button className="btn" onClick={openSettings}>
+        <button className="btn" type="button" aria-label="Open settings" onClick={openSettings}>
           <GrabberIcon size={16} />
         </button>
       </div>
@@ -154,7 +170,7 @@ const App = () => {
           reset={reset}
         />
       </div>
-    </div>
+    </main>
   );
 };
 
