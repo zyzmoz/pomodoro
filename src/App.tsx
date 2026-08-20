@@ -13,6 +13,8 @@ import Controls from "./components/Controls/Controls";
 import RadioPlayer from "./components/RadioPlayer/RadioPlayer";
 
 const bell = new URL("./assets/sounds/bell.wav", import.meta.url).href;
+const ALERT_VOLUME_REDUCTION_START_SECONDS = 3;
+const ALERT_VOLUME_REDUCTION_DURATION = 8_000;
 
 const formatTime = (totalSeconds: number): string => {
   const minutes = Math.floor(totalSeconds / 60);
@@ -31,6 +33,8 @@ const App = () => {
   const timerRef = useRef(0);
   const isBreakRef = useRef(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const alertVolumeTimeoutRef = useRef<number | null>(null);
+  const [lowerVolumeForAlert, setLowerVolumeForAlert] = useState(false);
 
   if (audioRef.current === null) {
     audioRef.current = new Audio(bell);
@@ -85,14 +89,42 @@ const App = () => {
     timerRef.current = settings.workingTime * 60;
   }, [dispatch, playBell, settings.breakTime, settings.workingTime]);
 
+  const clearAlertVolumeReduction = useCallback(() => {
+    if (alertVolumeTimeoutRef.current !== null) {
+      window.clearTimeout(alertVolumeTimeoutRef.current);
+      alertVolumeTimeoutRef.current = null;
+    }
+
+    setLowerVolumeForAlert(false);
+  }, []);
+
+  const lowerVolumeBeforeAlert = useCallback(() => {
+    if (
+      !settings.lowerRadioVolumeOnBreak ||
+      timerRef.current !== ALERT_VOLUME_REDUCTION_START_SECONDS
+    ) {
+      return;
+    }
+
+    clearAlertVolumeReduction();
+    setLowerVolumeForAlert(true);
+    alertVolumeTimeoutRef.current = window.setTimeout(() => {
+      alertVolumeTimeoutRef.current = null;
+      setLowerVolumeForAlert(false);
+    }, ALERT_VOLUME_REDUCTION_DURATION);
+  }, [clearAlertVolumeReduction, settings.lowerRadioVolumeOnBreak]);
+
   const onTimerTick = useCallback(() => {
     setDisplay(formatTime(timerRef.current));
+    lowerVolumeBeforeAlert();
     timerRef.current -= 1;
 
     if (timerRef.current < 0) {
       onTimerComplete();
     }
-  }, [onTimerComplete]);
+  }, [lowerVolumeBeforeAlert, onTimerComplete]);
+
+  useEffect(() => clearAlertVolumeReduction, [clearAlertVolumeReduction]);
 
   useEffect(() => {
     if (!pomodoroStarted) {
@@ -107,26 +139,29 @@ const App = () => {
   }, [onTimerTick, pomodoroStarted]);
 
   const start = useCallback(() => {
+    clearAlertVolumeReduction();
     isBreakRef.current = false;
     timerRef.current = settings.workingTime * 60;
     setDisplay(formatTime(timerRef.current));
     dispatch(pomodoroActions.startPomodoro());
-  }, [dispatch, settings.workingTime]);
+  }, [clearAlertVolumeReduction, dispatch, settings.workingTime]);
 
   const stop = useCallback(() => {
+    clearAlertVolumeReduction();
     dispatch(pomodoroActions.stopPomodoro());
     timerRef.current = 0;
     isBreakRef.current = false;
     setDisplay("");
-  }, [dispatch]);
+  }, [clearAlertVolumeReduction, dispatch]);
 
   const reset = useCallback(() => {
+    clearAlertVolumeReduction();
     dispatch(pomodoroActions.resetPomodoro());
     isBreakRef.current = false;
     timerRef.current = settings.workingTime * 60;
     setDisplay(formatTime(timerRef.current));
     dispatch(pomodoroActions.startPomodoro());
-  }, [dispatch, settings.workingTime]);
+  }, [clearAlertVolumeReduction, dispatch, settings.workingTime]);
 
   const handleSaveSettings = useCallback((newSettings: PomodoroSettings) => {
     saveSettings(newSettings);
@@ -172,8 +207,8 @@ const App = () => {
       </div>
       <RadioPlayer
         autoPlayOnPomodoroStart={settings.autoPlayRadioOnPomodoroStart}
-        breakTime={breakTime}
         lowerVolumeDuringBreak={settings.lowerRadioVolumeOnBreak}
+        lowerVolumeForAlert={lowerVolumeForAlert}
         pomodoroStarted={pomodoroStarted}
       />
     </main>

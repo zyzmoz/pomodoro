@@ -4,6 +4,13 @@ This file tracks user-visible changes by release. It follows [Keep a Changelog](
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-08-20
+
+### Changed
+
+- Settings slide out before closing and close when the user clicks outside the menu.
+- The Code Radio alert preference lowers the audio by 60% three seconds before each timer alert, then restores it after eight seconds without changing the volume control.
+
 ## [1.2.3] - 2026-08-20
 
 ### Changed

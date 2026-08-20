@@ -96,7 +96,7 @@ describe("Settings", () => {
 
     await user.click(screen.getByRole("tab", { name: "Code Radio" }));
     await user.click(screen.getByLabelText("Play Code Radio when a Pomodoro starts"));
-    await user.click(screen.getByLabelText("Lower Code Radio volume during breaks"));
+    await user.click(screen.getByLabelText("Lower Code Radio volume around alerts"));
 
     expect(saveSettings).toHaveBeenLastCalledWith({
       autoPlayRadioOnPomodoroStart: true,
@@ -176,6 +176,62 @@ describe("Settings", () => {
     await user.click(screen.getByRole("tab", { name: "Code Radio" }));
 
     expect(screen.getByLabelText("Play Code Radio when a Pomodoro starts")).toBeTruthy();
-    expect(screen.getByLabelText("Lower Code Radio volume during breaks")).toBeTruthy();
+    expect(screen.getByLabelText("Lower Code Radio volume around alerts")).toBeTruthy();
+  });
+
+  it("slides out before closing when the close button is clicked", async () => {
+    const hideSettings = jest.fn();
+    const user = userEvent.setup();
+
+    render(
+      <Settings
+        workingTime={15}
+        breakTime={5}
+        primaryColor="#D8737F"
+        secondaryColor="#111111"
+        tertiaryColor="#000000"
+        autoPlayRadioOnPomodoroStart={false}
+        lowerRadioVolumeOnBreak={false}
+        hideSettings={hideSettings}
+        saveSettings={jest.fn()}
+      />
+    );
+
+    const dialog = screen.getByRole("dialog", { name: "Settings" });
+    await user.click(screen.getByLabelText("Close settings"));
+
+    expect(dialog).toHaveClass("settings--closing");
+    expect(hideSettings).not.toHaveBeenCalled();
+
+    fireEvent.animationEnd(dialog, { animationName: "settings-slide-out" });
+
+    expect(hideSettings).toHaveBeenCalledTimes(1);
+  });
+
+  it("closes when the user clicks outside the settings menu", () => {
+    const hideSettings = jest.fn();
+
+    render(
+      <Settings
+        workingTime={15}
+        breakTime={5}
+        primaryColor="#D8737F"
+        secondaryColor="#111111"
+        tertiaryColor="#000000"
+        autoPlayRadioOnPomodoroStart={false}
+        lowerRadioVolumeOnBreak={false}
+        hideSettings={hideSettings}
+        saveSettings={jest.fn()}
+      />
+    );
+
+    const dialog = screen.getByRole("dialog", { name: "Settings" });
+    fireEvent.mouseDown(document.body);
+
+    expect(dialog).toHaveClass("settings--closing");
+
+    fireEvent.animationEnd(dialog, { animationName: "settings-slide-out" });
+
+    expect(hideSettings).toHaveBeenCalledTimes(1);
   });
 });
