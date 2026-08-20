@@ -8,14 +8,14 @@ type ClockProps = {
 const Clock = ({ display, onBreak, pomodoroStarted, startWorking }: ClockProps) => {
 
   return (
-    <div className="clock" >
+    <div className="clock" role="timer" aria-live="polite">
       {pomodoroStarted && display ?
         <div>
           <p>{!onBreak ? 'Working' : 'Break'}</p>
           <p>{display} left</p>
         </div> :
         <div className="start">
-          <button className="btn btn-clear btn-start" onClick={startWorking}>Start</button>
+          <button className="btn btn-clear btn-start" type="button" onClick={startWorking}>Start</button>
         </div>
       }
 

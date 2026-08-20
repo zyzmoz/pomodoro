@@ -32,18 +32,22 @@ const Controls = ({ startWorking, stopWorking, pomodoroStarted, reset: resetPomo
   return (
     <div className="app-controls">
       <button className="btn btn-round btn-small"
+        type="button"
+        aria-label="Reset timer"
         onClick={reset}
       >
         <SyncIcon />
       </button>
 
       <button className="btn btn-round "
+        type="button"
+        aria-label={pomodoroStarted ? "Stop timer" : "Start timer"}
         onClick={toggle}
       >
         {!pomodoroStarted ? <TriangleRightIcon size={16} /> : <SquareIcon size={16} />}
       </button>
 
-      <button className="btn btn-round btn-small">
+      <button className="btn btn-round btn-small" type="button" aria-label="About Pomodoro">
         <InfoIcon />
       </button>
     </div>
