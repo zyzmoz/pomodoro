@@ -4,6 +4,8 @@ This file tracks user-visible changes by release. It follows [Keep a Changelog](
 
 ## [Unreleased]
 
+## [1.2.3] - 2026-08-20
+
 ### Changed
 
 - Settings save as each value changes. The Save button is gone.
