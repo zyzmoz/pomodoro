@@ -3,12 +3,89 @@ h2 {
 }
 
 .app-main {    
+  box-sizing: border-box;
   width: 100%;
   height: 100vh;
   display: flex;     
   align-items: center; 
   background-color: var(--color-primary, #D8737F);
   color: var(--color-secondary, #222222);
+  padding-bottom: 72px;
+}
+
+.radio-player {
+  align-items: center;
+  background-color: var(--color-tertiary, #000000);
+  bottom: 0;
+  box-sizing: border-box;
+  color: var(--color-primary, #D8737F);
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  left: 0;
+  min-height: 72px;
+  padding: 12px 24px;
+  position: fixed;
+  width: 100%;
+}
+
+.radio-player-name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.radio-current-song {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-width: 260px;
+  min-width: 0;
+}
+
+.radio-song-title,
+.radio-song-artist {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.radio-song-title {
+  font-weight: 600;
+}
+
+.radio-song-artist {
+  font-size: 13px;
+}
+
+.radio-player-button {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--color-primary, #D8737F);
+  border-radius: 50%;
+  color: var(--color-primary, #D8737F);
+  cursor: pointer;
+  display: flex;
+  height: 36px;
+  justify-content: center;
+  padding: 0;
+  width: 36px;
+}
+
+.radio-player-button:hover,
+.radio-player-button:focus-visible {
+  background-color: var(--color-primary, #D8737F);
+  color: var(--color-tertiary, #000000);
+}
+
+.radio-player-volume {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  width: 180px;
+}
+
+.radio-player-volume input {
+  cursor: pointer;
 }
 
 .app-header {  
@@ -63,6 +140,7 @@ h2 {
 }
 
 .settings {
+  animation: settings-slide-in 180ms ease-out;
   padding: 8px;
   position: fixed;
   top: 0;
@@ -77,6 +155,29 @@ h2 {
 .settings-header {
   margin: 5px;
   text-align: center;
+}
+
+.settings-tabs {
+  display: flex;
+  gap: 4px;
+  margin: 12px 5px;
+}
+
+.settings-tab {
+  background: transparent;
+  border: 1px solid var(--color-primary, #D8737F);
+  color: var(--color-primary, #D8737F);
+  cursor: pointer;
+  flex: 1;
+  min-height: 36px;
+  padding: 4px;
+}
+
+.settings-tab[aria-selected="true"],
+.settings-tab:hover,
+.settings-tab:focus-visible {
+  background: var(--color-primary, #D8737F);
+  color: var(--color-secondary, #222222);
 }
 
 .settings-content {
@@ -97,8 +198,25 @@ h2 {
   font-size: 12px;
 }
 
+.settings-content .settings-toggle {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.settings-content .settings-toggle input {
+  margin: 0;
+  width: auto;
+}
+
+.settings-content .settings-toggle span {
+  font-size: 14px;
+  margin: 0;
+}
+
 .settings-content input[type="range"] {
-  accent-color: var(--color-primary, #D8737F);
+  --range-filled: var(--color-primary, #D8737F);
 }
 
 .settings-content input[type="color"] {
@@ -112,8 +230,24 @@ input:focus-visible {
 }
 
 .settings .btn:focus-visible,
-.settings input:focus-visible {
+.settings input:not([type="range"]):focus-visible {
   outline-color: var(--color-primary, #D8737F);
+}
+
+@keyframes settings-slide-in {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settings {
+    animation: none;
+  }
 }
 
 
@@ -193,4 +327,42 @@ input:focus-visible {
   color: #222;
   font-size: 10px;
   text-align: center;
+}
+
+@media (max-width: 480px) {
+  .app-main {
+    padding-bottom: 104px;
+  }
+
+  .radio-player {
+    flex-wrap: wrap;
+    gap: 8px;
+    min-height: 104px;
+    padding: 8px 12px;
+  }
+
+  .radio-player-name,
+  .radio-player-volume span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .radio-current-song {
+    align-items: center;
+    flex-basis: 100%;
+    flex-direction: row;
+    justify-content: center;
+    max-width: 100%;
+  }
+
+  .radio-player-volume {
+    width: min(42vw, 180px);
+  }
 }

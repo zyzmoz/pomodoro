@@ -10,6 +10,7 @@ import { GrabberIcon } from "@primer/octicons-react";
 import Clock from "./components/Clock/Clock";
 import Settings from "./components/Settings/Settings";
 import Controls from "./components/Controls/Controls";
+import RadioPlayer from "./components/RadioPlayer/RadioPlayer";
 
 const bell = new URL("./assets/sounds/bell.wav", import.meta.url).href;
 
@@ -130,7 +131,6 @@ const App = () => {
   const handleSaveSettings = useCallback((newSettings: PomodoroSettings) => {
     saveSettings(newSettings);
     dispatch(pomodoroActions.saveSettings(newSettings));
-    dispatch(pomodoroActions.closeSettings());
   }, [dispatch]);
 
   const openSettings = useCallback(() => {
@@ -170,6 +170,12 @@ const App = () => {
           reset={reset}
         />
       </div>
+      <RadioPlayer
+        autoPlayOnPomodoroStart={settings.autoPlayRadioOnPomodoroStart}
+        breakTime={breakTime}
+        lowerVolumeDuringBreak={settings.lowerRadioVolumeOnBreak}
+        pomodoroStarted={pomodoroStarted}
+      />
     </main>
   );
 };

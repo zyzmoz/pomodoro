@@ -4,11 +4,17 @@ import type { PomodoroSettings } from "../types/pomodoro";
 
 const isPomodoroSettings = (value: unknown): value is Omit<
   PomodoroSettings,
-  "primaryColor" | "secondaryColor" | "tertiaryColor"
+  | "primaryColor"
+  | "secondaryColor"
+  | "tertiaryColor"
+  | "autoPlayRadioOnPomodoroStart"
+  | "lowerRadioVolumeOnBreak"
 > & {
   primaryColor?: string;
   secondaryColor?: string;
   tertiaryColor?: string;
+  autoPlayRadioOnPomodoroStart?: boolean;
+  lowerRadioVolumeOnBreak?: boolean;
 } => {
   if (typeof value !== "object" || value === null) {
     return false;
@@ -20,7 +26,11 @@ const isPomodoroSettings = (value: unknown): value is Omit<
     typeof settings.breakTime === "number" &&
     (typeof settings.primaryColor === "string" || typeof settings.primaryColor === "undefined") &&
     (typeof settings.secondaryColor === "string" || typeof settings.secondaryColor === "undefined") &&
-    (typeof settings.tertiaryColor === "string" || typeof settings.tertiaryColor === "undefined")
+    (typeof settings.tertiaryColor === "string" || typeof settings.tertiaryColor === "undefined") &&
+    (typeof settings.autoPlayRadioOnPomodoroStart === "boolean" ||
+      typeof settings.autoPlayRadioOnPomodoroStart === "undefined") &&
+    (typeof settings.lowerRadioVolumeOnBreak === "boolean" ||
+      typeof settings.lowerRadioVolumeOnBreak === "undefined")
   );
 };
 
@@ -51,6 +61,8 @@ export const loadSettings = (): PomodoroSettings => {
       primaryColor: themeColors.primary,
       secondaryColor: themeColors.secondary,
       tertiaryColor: themeColors.tertiary,
+      autoPlayRadioOnPomodoroStart: storedSettings.autoPlayRadioOnPomodoroStart,
+      lowerRadioVolumeOnBreak: storedSettings.lowerRadioVolumeOnBreak,
     };
   } catch {
     return DEFAULT_SETTINGS;

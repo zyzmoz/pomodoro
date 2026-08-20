@@ -17,6 +17,8 @@ describe("pomodoroSlice", () => {
       primaryColor: "#D8737F",
       secondaryColor: "#222222",
       tertiaryColor: "#000000",
+      autoPlayRadioOnPomodoroStart: true,
+      lowerRadioVolumeOnBreak: true,
     };
     const withSettings = pomodoroReducer(
       undefined,

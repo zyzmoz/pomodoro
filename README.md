@@ -1,6 +1,6 @@
 # Pomodoro Clock
 
-A browser-based Pomodoro timer for work and break sessions.
+A browser-based Pomodoro timer for focused work and break sessions. It stores preferences in the browser, so there is no account or server to set up.
 
 ![Pomodoro Clock screenshot](./screenshot.png)
 
@@ -8,9 +8,19 @@ A browser-based Pomodoro timer for work and break sessions.
 
 - Starts, stops, and resets work sessions.
 - Alternates between work and break periods.
-- Saves work and break durations in local storage.
-- Plays a bell and shows browser notifications when a period ends.
-- Runs as an installable PWA with a service worker.
+- Saves timer durations, colors, and Code Radio preferences in local storage.
+- Plays a bell and shows a browser notification when a period ends.
+- Includes an installable PWA and service worker.
+
+## Code Radio player
+
+The bottom player streams the official Code Radio MP3 feed. It shows the current song title and artist, and has play, pause, mute, and volume controls.
+
+The player does not start when the page opens. In Settings, you can choose to start it when a Pomodoro begins and lower its volume during breaks. Settings save as you change them, so there is no Save button. Your mute and volume choices remain after you return.
+
+## Settings
+
+The Timer tab opens first and contains work and break durations. Appearance holds the color controls, and Code Radio holds the player preferences. The panel slides in from the right. If your device asks for reduced motion, it opens without the animation.
 
 ## Stack
 
@@ -56,9 +66,9 @@ npm run build
 ```text
 src/
 ├── assets/       Styles, icons, and sounds
-├── components/   Clock, controls, and settings UI
+├── components/   Clock, controls, settings, and Code Radio UI
 ├── constants/    Shared values such as default durations
-├── helpers/      Local storage and notification code
+├── helpers/      Color, local storage, notification, and radio code
 ├── public/       HTML entry point, manifest, and service worker
 ├── store/        Redux Toolkit store and Pomodoro slice
 ├── types/        Shared TypeScript types
