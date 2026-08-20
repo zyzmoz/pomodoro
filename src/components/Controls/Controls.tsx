@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import {
   InfoIcon,
   SquareIcon,
@@ -13,17 +14,20 @@ type ControlsProps = {
 };
 
 const Controls = ({ startWorking, stopWorking, pomodoroStarted, reset: resetPomodoro }: ControlsProps) => {
-  const toggle = () => {
-    if (!pomodoroStarted)
-      startWorking()
-    else
-      stopWorking()
-  }
+  const toggle = useCallback(() => {
+    if (!pomodoroStarted) {
+      startWorking();
+      return;
+    }
 
-  const reset = () => {
-    if (pomodoroStarted)
+    stopWorking();
+  }, [pomodoroStarted, startWorking, stopWorking]);
+
+  const reset = useCallback(() => {
+    if (pomodoroStarted) {
       resetPomodoro();
-  }
+    }
+  }, [pomodoroStarted, resetPomodoro]);
 
   return (
     <div className="app-controls">

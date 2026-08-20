@@ -1,4 +1,4 @@
-import pomodoroReducer, { pomodoroActions } from "./pomodoroSlice";
+import pomodoroReducer, { pomodoroActions } from "../../src/store/pomodoroSlice";
 
 describe("pomodoroSlice", () => {
   it("uses the default settings before preferences are loaded", () => {

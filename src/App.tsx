@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { showNotification, requestNotificationPermission } from "./helpers/notifications";
 import { loadSettings, saveSettings } from "./helpers/settings";
 import { useAppDispatch, useAppSelector } from "./store";
@@ -12,15 +12,27 @@ import Controls from "./components/Controls/Controls";
 
 const bell = new URL("./assets/sounds/bell.wav", import.meta.url).href;
 
+const formatTime = (totalSeconds: number): string => {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = Math.floor(totalSeconds % 60);
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+  const formattedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+
+  return `${formattedMinutes}:${formattedSeconds}`;
+};
+
 const App = () => {
   const dispatch = useAppDispatch();
   const { showSettings, settings, breakTime, pomodoroStarted } = useAppSelector(
     (state) => state.pomodoro
   );
-  let timer = 0;
-  let minutes: number | string;
-  let seconds: number | string;
-  const audio = new Audio(bell);
+  const timerRef = useRef(0);
+  const isBreakRef = useRef(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  if (audioRef.current === null) {
+    audioRef.current = new Audio(bell);
+  }
 
   useEffect(() => {
     requestNotificationPermission();
@@ -28,79 +40,101 @@ const App = () => {
   }, [dispatch]);
 
   const [display, setDisplay] = useState("");
-  const [clock, setClock] = useState<number | null>(null);
 
-  const countDown = () => {
-    let onBreak = false;
-    if (timer != 0)
-      setClock(
-        window.setInterval(() => {
-          minutes = Math.floor(timer / 60);
-          seconds = Math.floor(timer % 60);
-          minutes = minutes < 10 ? "0" + minutes : minutes;
-          seconds = seconds < 10 ? "0" + seconds : seconds;
+  const playBell = useCallback(() => {
+    const audio = audioRef.current;
 
-          setDisplay(minutes + ":" + seconds);
-
-          if (--timer < 0) {
-            if (!onBreak) {
-              onBreak = true;
-              audio.currentTime = 0;
-              audio.play();
-              showNotification("Break time");
-              dispatch(pomodoroActions.startBreak());
-              timer = settings.breakTime * 60;
-            } else {
-              onBreak = false;
-              audio.currentTime = 0;
-              audio.play();
-              showNotification("It's time to work");
-              dispatch(pomodoroActions.stopBreak());
-              timer = settings.workingTime * 60;
-            }
-          }
-        }, 1000)
-      );
-  };
-
-  const start = () => {
-    timer = settings.workingTime * 60;
-    dispatch(pomodoroActions.startPomodoro());
-    if (!clock) countDown();
-  };
-
-  const stop = () => {
-    dispatch(pomodoroActions.stopPomodoro());
-    timer = 0;
-    if (clock !== null) {
-      window.clearInterval(clock);
+    if (!audio) {
+      return;
     }
-    setClock(null);
+
+    audio.currentTime = 0;
+    void audio.play().catch(() => undefined);
+  }, []);
+
+  const onTimerComplete = useCallback(() => {
+    isBreakRef.current = !isBreakRef.current;
+    playBell();
+
+    if (isBreakRef.current) {
+      showNotification("Break time");
+      dispatch(pomodoroActions.startBreak());
+      timerRef.current = settings.breakTime * 60;
+      return;
+    }
+
+    showNotification("It's time to work");
+    dispatch(pomodoroActions.stopBreak());
+    timerRef.current = settings.workingTime * 60;
+  }, [dispatch, playBell, settings.breakTime, settings.workingTime]);
+
+  const onTimerTick = useCallback(() => {
+    setDisplay(formatTime(timerRef.current));
+    timerRef.current -= 1;
+
+    if (timerRef.current < 0) {
+      onTimerComplete();
+    }
+  }, [onTimerComplete]);
+
+  useEffect(() => {
+    if (!pomodoroStarted) {
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      onTimerTick();
+    }, 1000);
+
+    return () => window.clearInterval(intervalId);
+  }, [onTimerTick, pomodoroStarted]);
+
+  const start = useCallback(() => {
+    isBreakRef.current = false;
+    timerRef.current = settings.workingTime * 60;
+    setDisplay(formatTime(timerRef.current));
+    dispatch(pomodoroActions.startPomodoro());
+  }, [dispatch, settings.workingTime]);
+
+  const stop = useCallback(() => {
+    dispatch(pomodoroActions.stopPomodoro());
+    timerRef.current = 0;
+    isBreakRef.current = false;
     setDisplay("");
-  };
+  }, [dispatch]);
 
-  const reset = () => {
+  const reset = useCallback(() => {
     dispatch(pomodoroActions.resetPomodoro());
-    stop();
-    start();
-  };
+    isBreakRef.current = false;
+    timerRef.current = settings.workingTime * 60;
+    setDisplay(formatTime(timerRef.current));
+    dispatch(pomodoroActions.startPomodoro());
+  }, [dispatch, settings.workingTime]);
 
-  const handleSaveSettings = (newSettings: PomodoroSettings) => {
+  const handleSaveSettings = useCallback((newSettings: PomodoroSettings) => {
     saveSettings(newSettings);
     dispatch(pomodoroActions.saveSettings(newSettings));
     dispatch(pomodoroActions.closeSettings());
-  };
+  }, [dispatch]);
+
+  const openSettings = useCallback(() => {
+    dispatch(pomodoroActions.openSettings());
+  }, [dispatch]);
+
+  const closeSettings = useCallback(() => {
+    dispatch(pomodoroActions.closeSettings());
+  }, [dispatch]);
 
   return (
     <div className="app-main">
       <div className="app-header">
-        <button className="btn" onClick={() => dispatch(pomodoroActions.openSettings())}>
+        <button className="btn" onClick={openSettings}>
           <GrabberIcon size={16} />
         </button>
       </div>
       {showSettings && (
         <Settings
-          hideSettings={() => dispatch(pomodoroActions.closeSettings())}
+          hideSettings={closeSettings}
           saveSettings={handleSaveSettings}
           {...settings}
         />

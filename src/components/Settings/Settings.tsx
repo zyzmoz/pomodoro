@@ -1,4 +1,4 @@
-import { useEffect, useState, type ChangeEvent } from 'react';
+import { useCallback, useEffect, useState, type ChangeEvent } from 'react';
 import { XIcon } from "@primer/octicons-react";
 
 type SettingsProps = {
@@ -22,13 +22,13 @@ const Settings = ({
     setBreakTime(initialBreakTime);
   }, [initialBreakTime, initialWorkingTime]);
 
-  const updateWorkingTime = (event: ChangeEvent<HTMLInputElement>) => {
+  const updateWorkingTime = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setWorkingTime(Number(event.target.value));
-  };
+  }, []);
 
-  const updateBreakTime = (event: ChangeEvent<HTMLInputElement>) => {
+  const updateBreakTime = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setBreakTime(Number(event.target.value));
-  };
+  }, []);
 
   return (
     <div className="settings">
