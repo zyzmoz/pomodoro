@@ -152,6 +152,11 @@ h2 {
   box-shadow: 1px -3px 3px 3px rgba(0, 0, 0, 0.3);
 }
 
+.settings--closing {
+  animation: settings-slide-out 180ms ease-in forwards;
+  pointer-events: none;
+}
+
 .settings-header {
   margin: 5px;
   text-align: center;
@@ -241,6 +246,16 @@ input:focus-visible {
 
   to {
     transform: translateX(0);
+  }
+}
+
+@keyframes settings-slide-out {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(100%);
   }
 }
 

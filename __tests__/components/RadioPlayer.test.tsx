@@ -106,7 +106,6 @@ describe("RadioPlayer", () => {
         autoPlayOnPomodoroStart
         lowerVolumeDuringBreak={false}
         pomodoroStarted={false}
-        breakTime={false}
       />
     );
 
@@ -115,7 +114,6 @@ describe("RadioPlayer", () => {
         autoPlayOnPomodoroStart
         lowerVolumeDuringBreak={false}
         pomodoroStarted
-        breakTime={false}
       />
     );
 
@@ -123,7 +121,7 @@ describe("RadioPlayer", () => {
     expect(await screen.findByRole("button", { name: "Pause Code Radio" })).toBeInTheDocument();
   });
 
-  it("remembers the mute and volume controls and lowers volume during a break", async () => {
+  it("remembers the mute and volume controls and only lowers the audio for an alert", async () => {
     const user = userEvent.setup();
     const { unmount } = render(<RadioPlayer />);
 
@@ -136,7 +134,6 @@ describe("RadioPlayer", () => {
         autoPlayOnPomodoroStart={false}
         lowerVolumeDuringBreak
         pomodoroStarted={false}
-        breakTime={false}
       />
     );
     const audio = screen.getByLabelText("Code Radio stream") as HTMLAudioElement;
@@ -151,18 +148,19 @@ describe("RadioPlayer", () => {
       <RadioPlayer
         autoPlayOnPomodoroStart={false}
         lowerVolumeDuringBreak
+        lowerVolumeForAlert
         pomodoroStarted={false}
-        breakTime
       />
     );
-    expect(audio.volume).toBe(0.2);
+    expect(audio.volume).toBeCloseTo(0.18);
+    expect(screen.getByLabelText("Code Radio volume")).toHaveValue("0.45");
 
     rerenderPlayer(
       <RadioPlayer
         autoPlayOnPomodoroStart={false}
         lowerVolumeDuringBreak
+        lowerVolumeForAlert={false}
         pomodoroStarted={false}
-        breakTime={false}
       />
     );
     expect(audio.volume).toBe(0.45);

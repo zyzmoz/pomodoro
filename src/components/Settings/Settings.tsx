@@ -35,7 +35,9 @@ const Settings = ({
     lowerRadioVolumeOnBreak: initialLowerRadioVolumeOnBreak,
   }));
   const settingsRef = useRef(settings);
+  const settingsMenuRef = useRef<HTMLElement>(null);
   const [activeTab, setActiveTab] = useState<SettingsTab>("timer");
+  const [isClosing, setIsClosing] = useState(false);
   const colors = getThemeColors(
     settings.primaryColor,
     settings.secondaryColor,
@@ -122,10 +124,49 @@ const Settings = ({
     });
   }, [updateSettings]);
 
+  const closeSettings = useCallback(() => {
+    setIsClosing(true);
+  }, []);
+
+  const finishClosingSettings = useCallback(() => {
+    if (isClosing) {
+      hideSettings();
+    }
+  }, [hideSettings, isClosing]);
+
+  useEffect(() => {
+    const closeOnOutsideClick = (event: MouseEvent): void => {
+      const settingsMenu = settingsMenuRef.current;
+
+      if (settingsMenu && event.target instanceof Node && !settingsMenu.contains(event.target)) {
+        closeSettings();
+      }
+    };
+
+    document.addEventListener("mousedown", closeOnOutsideClick);
+
+    return () => document.removeEventListener("mousedown", closeOnOutsideClick);
+  }, [closeSettings]);
+
+  useEffect(() => {
+    if (!isClosing || !window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    hideSettings();
+  }, [hideSettings, isClosing]);
+
   return (
-    <section className="settings" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <section
+      aria-labelledby="settings-title"
+      aria-modal="true"
+      className={`settings${isClosing ? " settings--closing" : ""}`}
+      onAnimationEnd={finishClosingSettings}
+      ref={settingsMenuRef}
+      role="dialog"
+    >
       <button className="btn btn-clear btn-dark" type="button" aria-label="Close settings"
-        onClick={hideSettings}
+        onClick={closeSettings}
       >
         <XIcon size={16} />
       </button>
@@ -236,7 +277,7 @@ const Settings = ({
                 onChange={(event) => updateSettings({ lowerRadioVolumeOnBreak: event.target.checked })}
                 type="checkbox"
               />
-              <span>Lower Code Radio volume during breaks</span>
+              <span>Lower Code Radio volume around alerts</span>
             </label>
           </section>
         )}

@@ -12,7 +12,6 @@ export const CODE_RADIO_STREAM_URL =
 export const CODE_RADIO_NOW_PLAYING_URL =
   "https://coderadio-admin-v2.freecodecamp.org/api/nowplaying_static/coderadio.json";
 
-const BREAK_VOLUME = 0.2;
 const SONG_REFRESH_INTERVAL = 30_000;
 
 type CodeRadioSong = {
@@ -22,8 +21,8 @@ type CodeRadioSong = {
 
 type RadioPlayerProps = {
   autoPlayOnPomodoroStart?: boolean;
-  breakTime?: boolean;
   lowerVolumeDuringBreak?: boolean;
+  lowerVolumeForAlert?: boolean;
   pomodoroStarted?: boolean;
 };
 
@@ -53,8 +52,8 @@ const getCurrentSong = (value: unknown): CodeRadioSong | null => {
 
 const RadioPlayer = ({
   autoPlayOnPomodoroStart = false,
-  breakTime = false,
   lowerVolumeDuringBreak = false,
+  lowerVolumeForAlert = false,
   pomodoroStarted = false,
 }: RadioPlayerProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -66,8 +65,8 @@ const RadioPlayer = ({
   const previousVolumeRef = useRef(savedPlayerState.previousVolume);
   const [currentSong, setCurrentSong] = useState<CodeRadioSong | null>(null);
 
-  const effectiveVolume = breakTime && lowerVolumeDuringBreak
-    ? Math.min(volume, BREAK_VOLUME)
+  const effectiveVolume = lowerVolumeDuringBreak && lowerVolumeForAlert
+    ? volume * 0.4
     : volume;
 
   const startPlayback = useCallback(() => {
