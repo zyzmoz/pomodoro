@@ -9,7 +9,7 @@
     "noEmit": true,
     "isolatedModules": true,
     "esModuleInterop": true,
-    "types": ["jest", "node"],
+    "types": ["@testing-library/jest-dom", "jest", "node"],
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
